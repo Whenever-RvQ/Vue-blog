@@ -29,15 +29,7 @@ export default {
     };
   },
   created () {
-    this.$api({ type: 'articles' }).then(result => {
-      this.articles = result.list
-      // console.log(this.articles)
-    }).catch(err => {
-      this.$notify.success({
-        title: '获取失败',
-        message: err.message
-      })
-    })
+    this.getArticles()
   },
   mounted () {
 
