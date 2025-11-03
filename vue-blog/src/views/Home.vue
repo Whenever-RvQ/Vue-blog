@@ -16,7 +16,10 @@
           </el-col>
           <el-col :span="18">
             <el-main class="blog-main">
+              <keep-alive include="ArticleList">
               <router-view></router-view>
+
+              </keep-alive>
             </el-main>
           </el-col>
         </el-row>
