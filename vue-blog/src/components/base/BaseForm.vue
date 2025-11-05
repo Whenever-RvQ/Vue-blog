@@ -1,17 +1,20 @@
 <template>
   <div>
     <el-form :model="form"
-             ref="elForm">
+             ref="elForm"
+             >
       <el-form-item v-for="(item) in formData"
                     :key="item['query']"
                     :label="item.label"
                     label-width="100px"
                     :rules="validates[item['query']]"
-                    :prop="item['query']">
+                    :prop="item['query']"
+                     class="auth-tab">
         <el-input v-model="form[item['query']]"
                   :type="item.type"
                   :name="item['query']"
                   autocomplete="off"></el-input>
+        
       </el-form-item>
 
     </el-form>
@@ -62,5 +65,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
+::v-deep .el-dialog
+  border-radius: 20px
 </style>

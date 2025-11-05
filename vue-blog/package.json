@@ -8,15 +8,18 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "element-ui": "^2.4.5",
+    "font-awesome": "^4.7.0",
     "jsencrypt": "^3.0.0-rc.1",
     "loadsh": "^0.0.4",
     "nprogress": "^0.2.0",
     "qs": "^6.9.6",
     "store": "^2.0.12",
     "vue": "^2.6.11",
+    "vue-circle-menu": "^1.1.1",
     "vue-router": "^3.2.0",
     "vuescroll": "^4.17.3",
     "vuex": "^3.4.0"

@@ -1,12 +1,13 @@
 <template>
 
-  <div class="article-wrap"
-       v-if="articles">
+  <div class="article-wrap" v-if="articles">
     <Scroll @handle-scroll="loadMore" ref="scrollView">
-      <el-card class="blog-content--item"
-               v-for="item in articles"
-               :key="item.id">
-        <CardArticleItem :article="item" />
+      <el-card class="blog-content--item" 
+                v-for="item in articles" 
+                :key="item.id">
+        <router-link :to="{name:'article', params: { id: item._id }}">
+          <ArticleItem :article="item" />
+        </router-link>
       </el-card>
     </Scroll>
   </div>
@@ -14,39 +15,44 @@
 </template>
 
 <script>
-import CardArticleItem from '@/components/card/CardArticleItem'
+import ArticleItem from '@/components/article/ArticleItem'
 import _ from 'loadsh'
 const TH = 200;
 export default {
   name: 'ArticleList',
   components: {
-    CardArticleItem
+    ArticleItem
   },
-  data () {
+  data() {
     return {
       articles: [],
       loading: false,
-      page:1,
-      size:200, 
-      scrollTop:0
+      page: 1,
+      size: 200,
+      scrollTop: 0
     };
   },
 
-  activated () {
-    if(this.scrollTop){
+  activated() {
+    if (this.scrollTop) {
       this.$refs['scrollView'].scrollTo({
         y: this.scrollTop
-      },300)
+      }, 300)
     }
   },
 
-  created () {
+  created() {
     this.getArticles()
+
   },
-  mounted () {
+  mounted() {
 
   },
   methods: {
+    routeArticle(id) {
+      this.$router.push({ name: 'article', params: { id: id } })
+    },
+
     loadMore: _.throttle(function (vertical, horizontal, nativeEvent) {
       this.scrollTop = vertical.scrollTop
 
@@ -62,7 +68,7 @@ export default {
         this.getArticles()
       }
     }, 500, false),
-getArticles () {
+    getArticles() {
       this.$api({ type: 'articles', data: { size: this.size, page: this.page } }).then(result => {
         if (this.articles.length >= result.total) {
           //没有更多了
@@ -83,7 +89,7 @@ getArticles () {
 };
 </script>
 
-<style lang="stylus" >
+<style lang="stylus">
 .article-wrap
   overflow hidden
   height 100%

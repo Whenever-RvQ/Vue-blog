@@ -14,7 +14,8 @@ export default new Vuex.Store({
   state: {
     token: store.get(TOKEN_NAME) || "",
     userInfo: store.get('userInfo') || "",
-    username: store.get('username') || ""
+    username: store.get('username') || "",
+    welcome: store.get('welcome') || false,
   },
   getters: {
     userInfo(state) {
@@ -35,12 +36,16 @@ export default new Vuex.Store({
     SET_USERNAME(state, username) {
       state.username = username
       store.set('username', username)
+    },
+    SET_WELCOME(state, welcome) {
+      state.welcome = welcome
+      store.set('welcome', welcome)
     }
   },
   actions: {
     async login({ dispatch, commit }) {
       commit('SET_TOKEN')
-      
+      commit('SET_WELCOME', true)
       dispatch('getUserInfo')
     },
     async getUserInfo({ commit,state }) {

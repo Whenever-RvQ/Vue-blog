@@ -30,6 +30,7 @@ export default {
       localStorage.removeItem('uid')
       localStorage.removeItem('ua_jot')
       localStorage.removeItem('ua_publicKay')
+      localStorage.removeItem('welcome')
       location.reload()
     }
   },

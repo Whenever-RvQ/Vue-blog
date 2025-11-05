@@ -9,7 +9,8 @@ import '@/plugins/vuescroll'
 
 import '@/assets/css/global.styl'
 import 'element-ui/lib/theme-chalk/display.css'
-
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
 
 
 

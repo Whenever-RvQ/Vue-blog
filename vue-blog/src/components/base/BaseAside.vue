@@ -60,8 +60,8 @@ export default {
 <style lang="stylus" >
 @import '~assets/css/base.styl'
 .blog-aside
-  width 80%
-  max-width 240px
+  width 100%
+  max-width 280px
   text-align center
 .blog-slide-wrap
   padding 20px
@@ -92,6 +92,9 @@ export default {
   padding padding-space padding-space * 2
 .blog-state--item
   padding 0 padding-space * 1.5
+  display: flex
+  flex-direction column
+  justify-content: center
 .blog-state--item span
   display block
 .blog-state--count

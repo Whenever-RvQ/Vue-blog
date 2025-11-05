@@ -28,7 +28,7 @@ const routes = [
           requiresAuth: true
         }
       },
-      { path: '/article/:id', component: Article }
+      { path: '/article/:id', component: Article, name: 'article' }
     ]
   }
 

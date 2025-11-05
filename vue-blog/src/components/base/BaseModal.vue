@@ -1,19 +1,12 @@
 <template>
-  <div>
-    <el-dialog :title="title"
-               :visible.sync="isShow"
-               :width="width"
-               :before-close="close">
-      <BaseForm v-if="hasForm"
-                :type="type"
-                ref="form" />
-      <div slot="footer"
-           class="dialog-footer">
-        <el-button v-for="btn in btns"
-                   :key="btn.targetName"
-                   @click="handlerBtn(btn.targetName,btn.isSubmit)">{{btn.name}}</el-button>
+  <div >
+      <el-dialog :title="title" :visible.sync="isShow" :width="width" :before-close="close"  class="auth-container">
+      <BaseForm v-if="hasForm" :type="type" ref="form" />
+      <div slot="footer" class="dialog-footer">
+        <el-button v-for="btn in btns" :key="btn.targetName" @click="handlerBtn(btn.targetName, btn.isSubmit)">{{btn.name }}</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
@@ -28,7 +21,7 @@ export default {
   components: {
     BaseForm
   },
-  data () {
+  data() {
     return {
 
     }
@@ -36,16 +29,16 @@ export default {
 
   computed: {
     ...mapState(['isShow', 'type']),
-    title () {
+    title() {
       return MODAL_DATA[this.type]?.title ?? '默认modal'
     },
-    width () {
+    width() {
       return MODAL_DATA[this.type]?.width ?? '60%'
     },
-    hasForm () {
+    hasForm() {
       return MODAL_DATA[this.type]?.formType
     },
-    btns () {
+    btns() {
       return MODAL_DATA[this.type]?.btns ?? [{
         targetName: 'close',
         name: '取消'
@@ -56,11 +49,11 @@ export default {
       }]
     }
   },
-  mounted () {
+  mounted() {
 
   },
   methods: {
-    handlerBtn (action, isSubmit) {
+    handlerBtn(action, isSubmit) {
       //事件代理 close confirm
       if (isSubmit) {
         this.submitForm()
@@ -68,13 +61,13 @@ export default {
       }
       this[action] && this[action]()
     },
-    submitForm () {
+    submitForm() {
       let refForm = this.$refs['form']
       refForm.$refs['elForm'].validate(async (valid) => {
         if (valid) {
           try {
             await this.$api({ type: this.type, data: refForm.form })
-            this.$store.state.username=refForm.form.username
+            this.$store.state.username = refForm.form.username
             this.close()
           } catch (err) {
             refForm.$refs['elForm'].resetFields()
@@ -90,6 +83,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="stylus" scoped>
+.auth-container 
+  width: 100%;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  ::v-deep .el-dialog
+    border-radius: 10px;
 </style>
-

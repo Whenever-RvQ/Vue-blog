@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'CardArticleItem',
+  name: 'ArticleItem',
   props: {
     article: {
       type: Object
