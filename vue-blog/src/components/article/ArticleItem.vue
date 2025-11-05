@@ -1,23 +1,21 @@
 <template>
-  <article class="blog-content--item"
-           v-if="article">
+    <article class="blog-content--item" v-if="article">
 
-    <h3 class="blog-item--title">{{article.title}}</h3>
-    <p class="blog-item--date">
-      <i class="glyphicon glyphicon-time"></i> {{article.date}}
-    </p>
-    <p class="blog-item--author">{{nikname}}</p>
-    <img class="blog-item--illu"
-         :src="article.cover"
-         alt="">
-    <p class="blog-item--desc">
-      {{content}}
-    </p>
-    <p class="blog-item--tags"><span class="blog-tags--hit">浏览
-        ({{article.hit_num}})</span><span class="blog-tags--like">点赞 ({{article.like_num}})</span> <span class="blog-tags--comment">评论
-        ({{article.comment_num}})</span></p>
+      <h3 class="blog-item--title">{{ article.title }}</h3>
+      <p class="blog-item--date">
+        <i class="glyphicon glyphicon-time"></i> {{ article.date }}
+      </p>
+      <p class="blog-item--author">{{ nikname }}</p>
+      <img class="blog-item--illu" :src="article.cover" alt="">
+      <p class="blog-item--desc">
+        {{ content }}
+      </p>
+      <p class="blog-item--tags"><span class="blog-tags--hit">浏览
+          ({{ article.hit_num }})</span><span class="blog-tags--like">点赞 ({{ article.like_num }})</span> <span
+          class="blog-tags--comment">评论
+          ({{ article.comment_num }})</span></p>
 
-  </article>
+    </article>
 </template>
 
 <script>
@@ -28,24 +26,24 @@ export default {
       type: Object
     }
   },
-  data () {
+  data() {
     return {
-
+    
     };
   },
   computed: {
-    content () {
+    content() {
       let content = this.article.body.match(/>([^<>]+)</)[1]
       return content || '默认内容'
     },
-    nikname () {
+    nikname() {
       return this.article.author?.nikname || '默认昵称'
     },
-    like_num () {
-      return this.article?.like_num||'0'
+    like_num() {
+      return this.article?.like_num || '0'
     }
   },
-  mounted () {
+  mounted() {
     console.log(this.article)
   },
   methods: {
@@ -54,7 +52,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" >
+<style lang="stylus">
 @import '~assets/css/base.styl'
 .blog-content--item
   background-color line-modifier-color

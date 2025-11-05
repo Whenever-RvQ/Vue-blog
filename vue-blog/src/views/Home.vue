@@ -14,17 +14,23 @@
           <el-col :span="18" :lg="{ span: 24 }">
             <el-main class="blog-main">
               <keep-alive include="ArticleList">
-                <router-view></router-view>
-
+                <router-view :loading="loading"></router-view>
               </keep-alive>
             </el-main>
           </el-col>
-          <el-col :span="2">
-            <CircleMenu type='bottom' :number='2' :colors="[ '#ebc08e', '#e5b58d','#e19b60','#cc9b63','#cc9b63']" circle btn class="circle-menu">
-              <router-link tag="i" slot="item_1" class="el-icon-edit" colors=[#f1f1f1,#f1f1f1,#f1f1f1,#f1f1f1,#f1f1f1] to="/editor"></router-link>
-              <a slot="item_2" class="fa fa-weixin fa-lg" herf="#"></a>
-              <a slot="item_3" class="fa fa-weibo fa-lg" herf="#"></a>
-              <a slot="item_4" class="fa fa-github fa-lg" herf="#"></a>
+          <el-col :span="1">
+            <CircleMenu type='bottom' :number='3' :colors="['#ebc08e', '#ebc08e', '#ebc08e', '#ebc08e', '#ebc08e']"
+              circle btn class="circle-menu" v-if="index">
+              <router-link tag="i" slot="item_1" class="el-icon-edit" to="/editor"></router-link>
+              <router-link tag="i" slot="item_2" class="el-icon-star-on" to="/like"></router-link>
+              <i slot="item_3" class="el-icon-refresh-left" @click="refreshAll()"></i>
+
+            </CircleMenu>
+            <CircleMenu type='bottom' :number='3' :colors="['#ebc08e', '#ebc08e', '#ebc08e', '#ebc08e', '#ebc08e']"
+              circle btn class="circle-menu" v-if="articletools">
+              <router-link tag="i" slot="item_1" class="el-icon-edit" to="/editor"></router-link>
+              <router-link tag="i" slot="item_2" class="el-icon-star-on" to="/like"></router-link>
+              <router-link tag="i" slot="item_3" class="el-icon-download" to="/download"></router-link>
             </CircleMenu>
           </el-col>
         </el-row>
@@ -52,19 +58,56 @@ export default {
   mixins: [MINXIN],
   components: {
     BaseModal, BaseHeader, BaseAside, BaseWelcome, CircleMenu
-
   },
   data() {
     return {
+      loading: false
     }
   },
   computed: {
     welcome() {
       return this.$store.state.welcome
+    },
+    index() {
+      return this.$route.path === '/index'
+    },
+    articletools() {
+      const basicPath = /^\/article\/.*/
+      return basicPath.test(this.$route.path)
     }
   },
-  methods: {
 
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (to.path === '/index') {
+        vm.refreshData();
+      }
+    });
+  },
+  beforeRouteUpdate(to, from, next) {
+    if (to.path === '/index') {
+      this.refreshData();
+    }
+    next();
+  },
+  mounted() {
+    // 页面挂载时也可以检查一次
+    if (this.$route.path === '/index') {
+      this.refreshData();
+    }
+  },
+   watch: {
+
+  },
+  methods: {
+    refreshData() {
+      if (this.$store.state.token) {
+        this.$store.dispatch('getUserInfo');
+      }
+    },
+    refreshAll(){
+      location.reload();
+    }
   }
 }
 </script>
@@ -84,9 +127,16 @@ export default {
 .blog-footer
   height 10vh
   background-color #2D2F33
+.circle-menu
+  margin-top: 1vh
+  width: 55%
+  scale: 0.7
 .circle-menu i
   color: white
   scale: 1.2
+  transform: transition( all 0.3s ease )
 .circle-menu i:hover
   scale: 1.5
+  transform: transition( all 0.3s ease )
+
 </style>

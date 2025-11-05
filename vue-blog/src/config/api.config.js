@@ -60,5 +60,5 @@ export default {
   'uploadArticle': {
     url: '/upload/article',
     method: 'POST'
-  }
+  },
 }

@@ -1,9 +1,14 @@
 <template>
-  <div>
-    <ArticleContent :article="this.article" />
-    <CommentTextArea :aid="article._id" />
-    <CommentList :comments="article.comments" />
-  </div>
+    <Scroll>
+
+      <div>
+        <ArticleContent :article="this.article" />
+        <CommentTextArea :aid="article._id" />
+        <CommentList :comments="article.comments" />
+      </div>
+
+    </Scroll>
+
 </template>
 
 <script>
@@ -11,6 +16,7 @@
 import ArticleContent from '@/components/article/ArticleContent'
 import CommentTextArea from '@/components/comment/CommentTextArea'
 import CommentList from '@/components/comment/CommentList'
+import MINXIN from '@/core/minxin'
 export default {
   name: 'Article',
   components: {
@@ -19,10 +25,11 @@ export default {
   data() {
     return {
       id: '',
-      article: {}
+      article: {},
+      mixins: [MINXIN],
     };
   },
-    provide () {
+  provide() {
     return {
       getArticleById: this.getArticleById
     }
@@ -34,6 +41,10 @@ export default {
   mounted() {
     this.getArticleById()
   },
+
+  computed: {
+
+  },
   methods: {
     getArticleById() {
       this.$api({ type: 'getArticleById', data: { id: this.id } }).then(result => {
@@ -44,12 +55,17 @@ export default {
           message: err.message
         })
       })
-    }
+    },
   },
+
+  getCurrentPath() {
+    return this.$route.path
+  }
 };
 </script>
 
 <style lang="stylus">
 .blog-main--card
   width 100%
+
 </style>

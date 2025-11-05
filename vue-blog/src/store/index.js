@@ -45,14 +45,15 @@ export default new Vuex.Store({
   actions: {
     async login({ dispatch, commit }) {
       commit('SET_TOKEN')
-      commit('SET_WELCOME', true)
       dispatch('getUserInfo')
+
+
     },
-    async getUserInfo({ commit,state }) {
+    async getUserInfo({ commit, state }) {
       try {
         let userList = await http({ type: 'getUsers' })
-        userList=userList.list
-        let username=state.username
+        userList = userList.list
+        let username = state.username
         let userInfo
         userList.forEach(item => {
           if (item.username === username) {
@@ -61,10 +62,14 @@ export default new Vuex.Store({
         })
         commit('SET_USERNAME', state.username)
         commit('SET_USERINFO', userInfo)
-        Vue.prototype.$notify.success({
-          title: '登录成功',
-          message: `欢迎你 ${userInfo.nikname}`
-        })
+        if (!state.welcome) {
+          commit('SET_WELCOME', true)
+          Vue.prototype.$notify.success({
+            title: '登录成功',
+            message: `欢迎你 ${userInfo.nikname}`
+          })
+        }
+
       } catch (err) {
         console.log(err)
       }

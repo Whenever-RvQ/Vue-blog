@@ -7,7 +7,7 @@ import Home from '../views/Home.vue'
 import Article from '../views/Article'
 import ArticleList from '../views/ArticleList'
 import Column from '../views/Column'
-
+import Editor from '../views/Editor'
 
 
 
@@ -28,7 +28,12 @@ const routes = [
           requiresAuth: true
         }
       },
-      { path: '/article/:id', component: Article, name: 'article' }
+      { path: '/article/:id', component: Article, name: 'article' },
+      {
+        path: '/editor',
+        name: 'editor',
+        component: Editor
+      }
     ]
   }
 
