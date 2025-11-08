@@ -8,7 +8,7 @@ import Article from '../views/Article'
 import ArticleList from '../views/ArticleList'
 import Column from '../views/Column'
 import Editor from '../views/Editor'
-
+import Base404 from '@/components/base/Base404'
 
 
 Vue.use(VueRouter)
@@ -20,7 +20,7 @@ const routes = [
     redirect: '/index',
     component: Home,
     children: [
-      { path: '/index', component: ArticleList },
+      { path: '/index', name: 'index', component: ArticleList },
       {
         path: '/column',
         component: Column,
@@ -33,6 +33,22 @@ const routes = [
         path: '/editor',
         name: 'editor',
         component: Editor
+      },
+      {
+        path: '/index',
+        name: 'search',
+        component: ArticleList
+      },
+      // 添加404页面路由
+      {
+        path: '/404',
+        name: '404',
+        component: Base404
+      },
+      // 添加通配符路由，处理所有未匹配的路径
+      {
+        path: '*',
+        redirect: '/404'
       }
     ]
   }

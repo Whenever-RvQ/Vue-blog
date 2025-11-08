@@ -14,9 +14,9 @@ export default {
       }
     ]
   },
-  "column": {
+  "postColumn": {
     title: '添加分类',
-    formType: 'column',
+    formType: 'postColumn',
     btns: [
       {
         targetName: 'close',

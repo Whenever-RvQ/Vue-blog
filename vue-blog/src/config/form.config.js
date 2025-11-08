@@ -13,7 +13,7 @@ export default {
       placeholder: "密码: 8-12位 最少包含一位(数字/大小写字母)",
     }
   ],
-  "column": [
+  "postColumn": [
     {
       label: "分类名称",
       query: "name",
@@ -67,5 +67,6 @@ export default {
       type: "txt",
       placeholder: "请输入你的个性签名"
     }
-  ]
+  ],
+  
 }

@@ -55,14 +55,19 @@ export default new Vuex.Store({
         userList = userList.list
         let username = state.username
         let userInfo
-        userList.forEach(item => {
-          if (item.username === username) {
-            userInfo = item
-          }
-        })
+
+        if (userList && Array.isArray(userList)) {
+          userList.forEach(item => {
+            if (item.username === username) {
+              userInfo = item
+            }
+          })
+        }
+
         commit('SET_USERNAME', state.username)
         commit('SET_USERINFO', userInfo)
-        if (!state.welcome) {
+
+        if (!state.welcome && userInfo) {
           commit('SET_WELCOME', true)
           Vue.prototype.$notify.success({
             title: '登录成功',
@@ -70,8 +75,10 @@ export default new Vuex.Store({
           })
         }
 
+        return userInfo // 返回用户信息
       } catch (err) {
         console.log(err)
+        return null
       }
     }
   },

@@ -4,7 +4,7 @@ import base from '@/config/base.config'
 
 const { BASE_URL, TIMEOUT, TOKEN_NAME } = base
 const service = axios.create({
-  baseURL: BASE_URL,
+  baseURL: process.env.VUE_APP_BASE_URL || BASE_URL,
   timeout: TIMEOUT
 })
 

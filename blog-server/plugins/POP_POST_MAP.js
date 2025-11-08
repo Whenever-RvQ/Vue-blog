@@ -63,7 +63,7 @@ module.exports = {
         "queryAct": "findByIdAndUpdate",
         "options": function (_id) {
             return {
-                "inc": {
+                "$inc": {
                     "columnCount": 1
                 }
             }

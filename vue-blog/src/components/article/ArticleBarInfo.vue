@@ -11,10 +11,10 @@
         <i class="el-icon-star-on"></i> {{info.like_num}}
       </span>
       <span class="blog-info--item">
-        <i class="el-icon-star-on"></i> {{info.hit_num}}
+        <i class="el-icon-view"></i> {{info.hit_num}}
       </span>
       <span class="blog-info--item">
-        <i class="el-icon-star-on"></i> {{info.comment_num}}
+        <i class="el-icon-edit-outline"></i> {{info.comment_num}}
       </span>
     </div>
   </div>

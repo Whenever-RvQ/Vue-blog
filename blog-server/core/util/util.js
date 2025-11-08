@@ -36,12 +36,39 @@ function decrypt (cipher) {
 
 
 
-async function pagination ({ model, query, options, populate = {}, size, page, dis }) {
+async function pagination({ model, query, options, populate = {}, size, page, dis }) {
+  // 解析查询字符串
   if (typeof query === 'string') {
     query = qs.parse(query)
   }
   console.log(query)
-  let result = await mongoPage(model).find(query).sort({ '_id': -1 }).populate(populate).select(options).size(size).page(page).display(dis).exec()
+  // 处理关键词搜索
+  let mongoQuery = {}
+  let q = query?.q
+  if (q) {
+    let regExp = new RegExp(q, 'i')
+    // 关键词搜索使用 $or 操作符
+    mongoQuery.$or = [
+      { title: { $regex: regExp } },
+      { body: { $regex: regExp } }
+    ]
+  }
+  
+  // 处理其他查询参数，如 column
+  if (query?.column) {
+    mongoQuery.column = query.column
+  }
+  
+  // 使用处理后的查询条件
+  let result = await mongoPage(model)
+    .find(mongoQuery)
+    .sort({ '_id': -1 })
+    .populate(populate)
+    .select(options)
+    .size(size)
+    .page(page)
+    .display(dis)
+    .exec()
 
   let { total, records: list, pages, display } = result
   //count 当次返回的 list的长度 数据数量

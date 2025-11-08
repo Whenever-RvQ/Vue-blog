@@ -104,13 +104,16 @@ router.delete('/:id', async (req, res) => {
 //查询资源列表
 router.get('/', async (req, res,next) => {
   let modelName = req.Model.modelName
-  let { options = {}, page = 1, size = 100, query = '', populate='',dis = 8 } = req
-  query=query.query
+  let { options = {}, page = 1, size = 100, query = '', populate='',dis = 8 } = req.query
+  // 注意这里使用 req.query 而不是 req
+  
+  console.log(query)
   try {
     if(modelName in POPULATE_MAP){
       populate = POPULATE_MAP[modelName]
     } 
     let result = await pagination({ model: req.Model, query, options,populate,size, page, dis })
+    console.log(result)
     res.send(200,{
       message: 'ok',
       data: result
@@ -119,9 +122,6 @@ router.get('/', async (req, res,next) => {
     console.log(err)
     next(createError(422, "请求错误"))
   }
-
-  // const items = await req.Model.find().setOptions(queryOptions)
-  // res.send(200, { message: 'ok', data: { count: items.length, list: items } })
 })
 
 //查询资源详情

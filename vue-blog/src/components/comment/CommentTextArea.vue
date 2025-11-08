@@ -1,12 +1,8 @@
 <template>
   <el-card>
     <div class="blog-comment blog-comment--editor">
-      <textarea class="blog-comment--input"
-                v-model="commentVal"
-                name="comment"
-                autofocus></textarea>
-      <el-button type="primary"
-                 @click="submitComment">提交</el-button>
+      <textarea ref="textarea" class="blog-comment--input" v-model="commentVal" name="comment" autofocus></textarea>
+      <el-button type="primary" @click="submitComment">提交</el-button>
     </div>
   </el-card>
 </template>
@@ -20,16 +16,26 @@ export default {
       type: String
     }
   },
-  data () {
+  data() {
     return {
       commentVal: ''
     };
   },
-  mounted () {
+  mounted() {
 
   },
   methods: {
-    async submitComment () {
+    focusTextarea() {
+      this.$refs.textarea.focus();
+    },
+    async submitComment() {
+      if (this.commentVal.trim().length === 0) {
+        this.$notify.info({
+          title: '请填写评论内容',
+        })
+        this.focusTextarea()
+        return
+      }
       try {
         await this.$api({ type: 'postComment', data: { aid: this.aid, content: this.commentVal } })
         this.$notify.success({
@@ -43,11 +49,10 @@ export default {
           message: err.message
         })
       }
-
+      this.commentVal = ''
     }
   },
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

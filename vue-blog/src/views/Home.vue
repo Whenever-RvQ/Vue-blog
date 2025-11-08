@@ -8,13 +8,13 @@
 
         <el-row class="blog-middle--wrap" type="flex" justify="flex-wrap" align="center">
           <el-col :span="6" class="hidden-md-and-down">
-            <BaseAside v-if="$store.state.token" />
+            <BaseAside v-if="$store.state.userInfo" />
           </el-col>
 
           <el-col :span="18" :lg="{ span: 24 }">
             <el-main class="blog-main">
               <keep-alive include="ArticleList">
-                <router-view :loading="loading"></router-view>
+                <router-view v-if="isRouteLoading" :loading="loading"></router-view>
               </keep-alive>
             </el-main>
           </el-col>
@@ -31,6 +31,11 @@
               <router-link tag="i" slot="item_1" class="el-icon-edit" to="/editor"></router-link>
               <router-link tag="i" slot="item_2" class="el-icon-star-on" to="/like"></router-link>
               <router-link tag="i" slot="item_3" class="el-icon-download" to="/download"></router-link>
+            </CircleMenu>
+            <CircleMenu type='bottom' :number='2' :colors="['#ebc08e', '#ebc08e', '#ebc08e', '#ebc08e', '#ebc08e']"
+              circle btn class="circle-menu" v-if="columntools">
+              <i tag="i" slot="item_1" class="el-icon-circle-plus-outline" @click="addColumn"></i>
+              <i tag="i" slot="item_2" class="el-icon-delete" @click="deleteColumn"></i>
             </CircleMenu>
           </el-col>
         </el-row>
@@ -61,7 +66,14 @@ export default {
   },
   data() {
     return {
-      loading: false
+      loading: false,
+      isRouteLoading: true
+    }
+  },
+
+  provide() {
+    return {
+      'closeLoadClock': this.closeLoadClock
     }
   },
   computed: {
@@ -74,6 +86,12 @@ export default {
     articletools() {
       const basicPath = /^\/article\/.*/
       return basicPath.test(this.$route.path)
+    },
+    columntools() {
+      return this.$route.path === '/column'
+    },
+    userInfo() {
+      return this.$store.state.userInfo
     }
   },
 
@@ -86,27 +104,51 @@ export default {
   },
   beforeRouteUpdate(to, from, next) {
     if (to.path === '/index') {
-      this.refreshData();
+      this.reload()
+
+    }
+    if (this.$route.path === '/index') {
+      this.reload()
     }
     next();
   },
   mounted() {
     // 页面挂载时也可以检查一次
     if (this.$route.path === '/index') {
-      this.refreshData();
+
+      this.reload()
     }
   },
-   watch: {
-
+  watch: {
+    userInfo: {
+      deep: true,
+    }
   },
   methods: {
+    //重载route-view
+    reload(){
+      this.isRouteLoading = false
+      this.$nextTick(() => {
+        this.isRouteLoading = true
+      });
+    },
+    closeLoadClock() {
+      this.loading = false
+    },
+    addColumn(){
+      this.refreshModal('postColumn')
+    },
+    deleteColumn(){
+      this.refreshModal('deleteColumn')
+    },
     refreshData() {
       if (this.$store.state.token) {
         this.$store.dispatch('getUserInfo');
       }
     },
-    refreshAll(){
-      location.reload();
+    refreshAll() {
+      console.log('refreshAll')
+      location.reload()
     }
   }
 }
@@ -130,7 +172,7 @@ export default {
 .circle-menu
   margin-top: 1vh
   width: 55%
-  scale: 0.7
+  scale: 0.8
 .circle-menu i
   color: white
   scale: 1.2

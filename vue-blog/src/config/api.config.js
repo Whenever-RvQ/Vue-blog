@@ -61,4 +61,8 @@ export default {
     url: '/upload/article',
     method: 'POST'
   },
+  'search':{
+    url:'/search',
+    method:'GET'
+  }
 }

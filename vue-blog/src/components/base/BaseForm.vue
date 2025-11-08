@@ -13,6 +13,7 @@
         <el-input v-model="form[item['query']]"
                   :type="item.type"
                   :name="item['query']"
+                  :placeholder="item.placeholder"
                   autocomplete="off"></el-input>
         
       </el-form-item>

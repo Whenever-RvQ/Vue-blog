@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     content() {
-      let content = this.article.body.match(/>([^<>]+)</)[1]
+      let content = this.article.body.match(/>([^<>]+)</)?.[1]
       return content || '默认内容'
     },
     nikname() {
@@ -44,7 +44,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.article)
   },
   methods: {
 

@@ -7,5 +7,8 @@ export default {
     { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }],
   password: [
     { required: true, message: '密码必填', trigger: 'blur' },
-    { pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!.#*?&]{8,12}$/, message: '密码格式 至少包含大写字母+小写字母+数字 8-12位', trigger: 'blur' }]
+    { pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!.#*?&]{8,12}$/, message: '密码格式 至少包含大写字母+小写字母+数字 8-12位', trigger: 'blur' }],
+  name: [
+    { required: true, message: '分类名称必填', trigger: 'blur' },
+    { pattern: /^[\u4e00-\u9fa5a-zA-Z0-9]{2,10}$/, message: '分类名称格式 2-10位 中文+字母+数字', trigger: 'blur' }],
 }
