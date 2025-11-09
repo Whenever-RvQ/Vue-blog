@@ -5,7 +5,7 @@ export default {
     rsaKey: 'password',
     setToken: true,
   },
-  'getUsers':{
+  'getUsers': {
     url: '/api/rest/users',
     method: 'GET'
   },
@@ -14,7 +14,7 @@ export default {
     method: 'GET',
   },
   'putUserInfo': {
-    url: '/user',
+    url: '/api/rest/users/:id',
     method: 'PUT',
   },
   'index': {
@@ -61,8 +61,12 @@ export default {
     url: '/upload/article',
     method: 'POST'
   },
-  'search':{
-    url:'/search',
-    method:'GET'
-  }
+  'search': {
+    url: '/search',
+    method: 'GET'
+  },
+  'uploadAvatar': {
+    url: '/upload/user',
+    method: 'POST'
+  },
 }

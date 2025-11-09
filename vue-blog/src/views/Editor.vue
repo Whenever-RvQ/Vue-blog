@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import wangEditor from 'wangeditor'
+import wangEditor from 'wangEditor'
 const COLUMN_ID = '5fe756e7dcda945a1cbf6ff6'
 export default {
   name: 'Editor',

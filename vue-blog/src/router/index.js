@@ -8,6 +8,7 @@ import Article from '../views/Article'
 import ArticleList from '../views/ArticleList'
 import Column from '../views/Column'
 import Editor from '../views/Editor'
+import BaseUser from '@/components/base/BaseUser'
 import Base404 from '@/components/base/Base404'
 
 
@@ -38,6 +39,14 @@ const routes = [
         path: '/index',
         name: 'search',
         component: ArticleList
+      },
+      {
+        path: '/user',
+        component: BaseUser,
+        name: 'user',
+        meta: {
+          requiresAuth: true
+        }
       },
       // 添加404页面路由
       {

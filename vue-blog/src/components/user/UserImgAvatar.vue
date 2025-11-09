@@ -1,9 +1,9 @@
 <template>
   <div class=" blog-header--login">
-    <el-image class="blog-avatar-img" :src="src" fit="cover"></el-image>
-    <i v-if="$store.state.token"
-              @click="handleLogout"
-              class="el-icon-back logout-btn"></i>
+    <keep-alive>
+      <router-link tag="img" class="blog-avatar-img" :src="src" to="/user" fit="cover"></router-link>
+    </keep-alive>
+    <i v-if="$store.state.token" @click="handleLogout" class="el-icon-back logout-btn"></i>
   </div>
 </template>
 

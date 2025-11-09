@@ -9,7 +9,7 @@ const createError = require('http-errors')
 const assert = require('http-assert')
 const app = require('../app')
 const expressJwt = require('express-jwt')
-const {getPublicKeySync}=require('../core/rsaControl')
+const { getPublicKeySync } = require('../core/rsaControl')
 
 const { pagination } = require('../core/util/util')
 
@@ -25,22 +25,22 @@ const { model } = require('mongoose')
 // /api/rest/articles?query  articles => Article
 
 //创建资源
-router.post('/', async (req, res,next) => {
-  
+router.post('/', async (req, res, next) => {
+
 
   try {
 
     let modelName = req.Model.modelName
-    let body=req.body
-    if(modelName in RESOURCE_POST_MAP){
-      body=RESOURCE_POST_MAP[modelName]['body'](body,req._id)
+    let body = req.body
+    if (modelName in RESOURCE_POST_MAP) {
+      body = RESOURCE_POST_MAP[modelName]['body'](body, req._id)
     }
     const model = await req.Model.create(body)
     console.log(model)
     if (modelName in POP_POST_MAP) {
       let handlers = POP_POST_MAP[modelName]
       //这里改写支持数组形式，因为涉及到对多个数据操作
-      for(let handle in handlers){
+      for (let handle in handlers) {
         let item = handlers[handle]
         let _id = model._id
         let { _refId, _model, queryAct, options, content } = item
@@ -50,7 +50,7 @@ router.post('/', async (req, res,next) => {
       }
     }
 
-    res.send(200,{
+    res.send(200, {
       message: '提交成功',
       data: model
     })
@@ -66,28 +66,31 @@ router.put('/:id', async (req, res, next) => {
   try {
     let putData = req.body
     let modelName = req.Model.modelName
-    let userId = req._id
+    console.log(req.params)
     let id = req.params.id
     let updateData, result
-    let isValidate=(modelName in POP_PUT_MAP)
+    let isValidate = (modelName in POP_PUT_MAP)
     let data = await req.Model.findById(id)
-    assert(isValidate,400,"无权限修改，请联系管理员")
-    assert.equal(data[authField], userId,400,"无权限修改，请联系管理员")
-    
+    assert(isValidate, 400, "无权限修改，请联系管理员")
+    // assert.equal(data[authField], userId,400, "无权限修改，请联系管理员")
     let { revisable } = POP_PUT_MAP[modelName]
     updateData = Object.fromEntries(Object.entries(putData).filter(([key, value]) => {
       return revisable.includes(key)
     }))
+
     updateData['date'] = new Date().toISOString()
-    result = await req.Model.findByIdAndUpdate(req.params.id, updateData)
+    console.log(updateData)
+    result = await req.Model.findByIdAndUpdate(req.params.id, updateData, { new: true, runValidators: true })
+    console.log(result,'123')
     res.send(200, {
       message: '修改成功',
       data: result
     })
-    
-   
+
+
 
   } catch (err) {
+    console.log(err)
     next(createError(400, '添加失败'))
   }
 
@@ -102,19 +105,19 @@ router.delete('/:id', async (req, res) => {
 })
 
 //查询资源列表
-router.get('/', async (req, res,next) => {
+router.get('/', async (req, res, next) => {
   let modelName = req.Model.modelName
-  let { options = {}, page = 1, size = 100, query = '', populate='',dis = 8 } = req.query
+  let { options = {}, page = 1, size = 100, query = '', populate = '', dis = 8 } = req.query
   // 注意这里使用 req.query 而不是 req
-  
+
   console.log(query)
   try {
-    if(modelName in POPULATE_MAP){
+    if (modelName in POPULATE_MAP) {
       populate = POPULATE_MAP[modelName]
-    } 
-    let result = await pagination({ model: req.Model, query, options,populate,size, page, dis })
+    }
+    let result = await pagination({ model: req.Model, query, options, populate, size, page, dis })
     console.log(result)
-    res.send(200,{
+    res.send(200, {
       message: 'ok',
       data: result
     })

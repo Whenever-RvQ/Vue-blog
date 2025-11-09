@@ -38,6 +38,7 @@
     "sass-loader": "^7.0.3",
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
+    "tailwindcss": "^4.1.17",
     "vue-cli-plugin-element": "~1.0.1",
     "vue-template-compiler": "^2.6.11"
   },

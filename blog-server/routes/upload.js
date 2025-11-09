@@ -9,7 +9,8 @@ const createError = require('http-errors');
 
 const FILE_TYPE = {
   'user': 'user',
-  'article': 'article'
+  'article': 'article',
+  'image':'image'
 }
 
 const storage = multer.diskStorage({
@@ -44,7 +45,8 @@ router.post('/:classify', upload.any(), async (req, res, next) => {
     if (fileType === 'user') {
       assert(uid, 422, '用户头像必须指定UID')
     }
-    let fileURLS = req.files.map(item => {
+    console.log(req.files)
+    let fileURLS = req.files.map(item => { 
       let { destination, filename } = item
       return path.join(uploadURL, path.parse(destination).name, filename).replace(/\\/g, '/').replace('http:/', 'http://')
     })
