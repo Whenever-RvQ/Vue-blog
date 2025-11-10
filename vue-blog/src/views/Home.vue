@@ -29,7 +29,7 @@
             <CircleMenu type='bottom' :number='3' :colors="['#ebc08e', '#ebc08e', '#ebc08e', '#ebc08e', '#ebc08e']"
               circle btn class="circle-menu" v-if="articletools">
               <router-link tag="i" slot="item_1" class="el-icon-edit" to="/editor"></router-link>
-              <router-link tag="i" slot="item_2" class="el-icon-star-on" to="/like"></router-link>
+              <i slot="item_2" class="el-icon-star-on" @click="incArticleLikeNum"></i>
               <router-link tag="i" slot="item_3" class="el-icon-download" to="/download"></router-link>
             </CircleMenu>
             <CircleMenu type='bottom' :number='2' :colors="['#ebc08e', '#ebc08e', '#ebc08e', '#ebc08e', '#ebc08e']"
@@ -46,6 +46,7 @@
       <BaseWelcome />
     </div>
     <BaseModal />
+    <Live2D />
   </div>
 
 </template>
@@ -57,12 +58,13 @@ import BaseHeader from '@/components/base/BaseHeader'
 import BaseAside from '@/components/base/BaseAside'
 import BaseWelcome from '@/components/base/BaseWelcome'
 import CircleMenu from 'vue-circle-menu'
+import Live2D from '@/components/Live2d'  
 import MINXIN from '@/core/minxin'
 export default {
   name: 'Home',
   mixins: [MINXIN],
   components: {
-    BaseModal, BaseHeader, BaseAside, BaseWelcome, CircleMenu
+    BaseModal, BaseHeader, BaseAside, BaseWelcome, CircleMenu,Live2D
   },
   data() {
     return {
@@ -126,7 +128,7 @@ export default {
   },
   methods: {
     //重载route-view
-    reload(){
+    reload() {
       this.isRouteLoading = false
       this.$nextTick(() => {
         this.isRouteLoading = true
@@ -135,10 +137,67 @@ export default {
     closeLoadClock() {
       this.loading = false
     },
-    addColumn(){
+    addColumn() {
       this.refreshModal('postColumn')
     },
-    deleteColumn(){
+    async incArticleLikeNum() {
+      // 获取当前文章的点赞数，确保是数字类型
+      let currentLikeNum = 0;
+
+      // 从当前路由参数获取文章ID
+      const articleId = this.$route.params.id;
+
+      if (!articleId) {
+        this.$notify.error({
+          message: '无法获取文章信息'
+        });
+        return;
+      }
+
+      try {
+        // 首先获取文章当前的点赞数
+        const articleRes = await this.$api({
+          type: 'getArticleById',
+          data: { id: articleId }
+        });
+
+        currentLikeNum = parseInt(articleRes.like_num) || 0;
+
+        // 增加点赞数
+        const res = await this.$api({
+          type: 'putArticleLikeNum',
+          data: {
+            like_num: currentLikeNum + 1  // 确保是数字
+          },
+          params: {
+            id: articleId
+          }
+        });
+
+        if (res) {
+          console.log(res);
+          // 确保存储的是数字类型
+          const newLikeNum = parseInt(res.like_num) || 0;
+          localStorage.setItem('like_num', newLikeNum.toString());
+
+          this.$notify.success({
+            message: '已点赞！'
+          });
+
+          // 通知其他组件更新数据
+          this.$EventBus.$emit('article-like-updated', {
+            id: articleId,
+            like_num: newLikeNum
+          });
+        }
+      } catch (error) {
+        console.error('点赞失败:', error);
+        this.$notify.error({
+          message: '点赞失败: ' + error.message
+        });
+      }
+    },
+    deleteColumn() {
       this.refreshModal('deleteColumn')
     },
     refreshData() {

@@ -1,6 +1,6 @@
 module.exports = {
     "Article": {
-        "revisable": ["title", "cover", "content"],
+        "revisable": ["title", "cover", "content","like_num"],
         "authField": "author"
     },
     "User": {

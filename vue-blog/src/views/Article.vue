@@ -1,13 +1,13 @@
 <template>
-    <Scroll>
+  <Scroll>
 
-      <div>
-        <ArticleContent :article="this.article" />
-        <CommentTextArea :aid="article._id" />
-        <CommentList :comments="article.comments" />
-      </div>
+    <div>
+      <ArticleContent :article="this.article" />
+      <CommentTextArea :aid="article._id" />
+      <CommentList :comments="article.comments" />
+    </div>
 
-    </Scroll>
+  </Scroll>
 
 </template>
 
@@ -27,6 +27,7 @@ export default {
       id: '',
       article: {},
       mixins: [MINXIN],
+      isRouteLoading: true
     };
   },
   provide() {
@@ -40,12 +41,28 @@ export default {
 
   mounted() {
     this.getArticleById()
+    this.$EventBus.$on('article-like-updated', () => {
+      console.log('article-like-updated')
+      this.reload()
+    })
   },
-
+  beforeDestroy() {
+    this.$EventBus.$off('article-like-updated')
+  },
   computed: {
-
+    like_num() {
+      localStorage.setItem('like_num', this.article.like_num)
+      return localStorage.getItem('like_num')
+    }
   },
   methods: {
+    reload() {
+      this.isRouteLoading = false
+      this.$nextTick(() => {
+        this.isRouteLoading = true
+        this.getArticleById()
+      });
+    },
     getArticleById() {
       this.$api({ type: 'getArticleById', data: { id: this.id } }).then(result => {
         this.article = result

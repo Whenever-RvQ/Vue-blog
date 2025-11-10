@@ -69,4 +69,8 @@ export default {
     url: '/upload/user',
     method: 'POST'
   },
+  'putArticleLikeNum': {
+    url: '/api/rest/articles/:id',
+    method: 'PUT'
+  },
 }
