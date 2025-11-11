@@ -9,6 +9,7 @@ import ArticleList from '../views/ArticleList'
 import Column from '../views/Column'
 import Editor from '../views/Editor'
 import BaseUser from '@/components/base/BaseUser'
+import Socket from '../views/Socket'
 import Base404 from '@/components/base/Base404'
 
 
@@ -47,6 +48,11 @@ const routes = [
         meta: {
           requiresAuth: true
         }
+      },
+      {
+        path: '/socket',
+        name: 'socket',
+        component: Socket
       },
       // 添加404页面路由
       {

@@ -3,8 +3,9 @@ const path = require('path');
 const NodeRSA = require('node-rsa');
 const { priKeyPath, pubKeyPath } = require('../../config');
 const { compile } = require('morgan');
-const mongoPage = require('mongoose-sex-page')
-const qs = require('qs');
+const mongoPage = require('mongoose-sex-page');
+const qs = require('qs')
+
 
 function generateKeys () {
   const newkey = new NodeRSA({ b: 512 });
@@ -23,7 +24,6 @@ function encrypt (plain) {
   const nodersa = new NodeRSA(public_key);
   nodersa.setOptions({ encryptionScheme: 'pkcs1' });
   const encrypted = nodersa.encrypt(plain, 'base64');
-  console.log(encrypted)
   return encrypted;
 }
 
@@ -33,8 +33,6 @@ function decrypt (cipher) {
   prikey.setOptions({ encryptionScheme: 'pkcs1' });
   return prikey.decrypt(cipher, 'utf8')
 }
-
-
 
 async function pagination({ model, query, options, populate = {}, size, page, dis }) {
   // 解析查询字符串
@@ -76,9 +74,32 @@ async function pagination({ model, query, options, populate = {}, size, page, di
   return { count, page, size, total, list, pages, display }
 }
 
+function toDouble (num) {
+  return String(num)[1] && String(num) || '0' + num;
+}
+
+function formatDate (date = new Date(), format = "yyyy-MM-dd hh:mm:ss") {
+
+  let regMap = {
+    'y': date.getFullYear(),
+    'M': toDouble(date.getMonth() + 1),
+    'd': toDouble(date.getDate()),
+    'h': toDouble(date.getHours()),
+    'm': toDouble(date.getMinutes()),
+    's': toDouble(date.getSeconds()),
+  }
+
+  //逻辑(正则替换 对应位置替换对应值) 数据(日期验证字符 对应值) 分离
+  return Object.entries(regMap).reduce((acc, [reg, value]) => {
+    return acc.replace(new RegExp(`${reg}+`, 'g'), value);
+  }, format);
+}
+
+
 module.exports = {
   generateKeys,
   encrypt,
   decrypt,
-  pagination
+  pagination,
+  formatDate
 };

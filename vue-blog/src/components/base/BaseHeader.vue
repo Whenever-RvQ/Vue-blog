@@ -5,21 +5,22 @@
         <el-image :src="require('@/assets/img/logo.jpg')" fit="cover"></el-image>
       </div>
     </el-col>
-    <el-col class="hidden-xs-only" :span="16" :offset="2">
+    <el-col class="hidden-xs-only" :span="12" :offset="1">
       <el-menu class="blog-head--menu" mode="horizontal" background-color="#2d2f33" text-color="#fff"
         active-text-color="#fff" :default-active=activeIndex router>
         <el-menu-item index="/index">首页</el-menu-item>
         <el-menu-item index="/column">分类</el-menu-item>
         <el-menu-item index="/album">相册</el-menu-item>
+        <el-menu-item index="/socket">聊天</el-menu-item>
         <el-menu-item index="/case">案例</el-menu-item>
       </el-menu>
     </el-col>
-    <el-col class="blog-search" :span="8" :offset="1">
+    <el-col class="blog-search" :span="8" :offset="3">
       <el-input placeholder="请输入内容" v-model="searchVal" @keydown.native.enter="activeSearch">
         <i slot="suffix" class="el-input_icon el-icon-search" v-show="searchVal"></i>
       </el-input>
     </el-col>
-    <el-col :span="4" class="hidden-xs-only">
+    <el-col :span="4" :offset="4" class="hidden-xs-only">
       <component :is="loginCompantent"></component>
     </el-col>
   </el-row>
@@ -73,7 +74,8 @@ export default {
         { pattern: /^\/index$/, index: '/index' },
         { pattern: /^\/column(?:\/.*)?$/, index: '/column' },
         { pattern: /^\/album(?:\/.*)?$/, index: '/album' },
-        { pattern: /^\/case(?:\/.*)?$/, index: '/case' }
+        { pattern: /^\/case(?:\/.*)?$/, index: '/case' },
+        { pattern: /^\/socket$/, index: '/socket' },
       ];
         const matchedRoute = menuRoutes.find(route => route.pattern.test(path));
         this.activeIndex = matchedRoute ? matchedRoute.index : '/index';

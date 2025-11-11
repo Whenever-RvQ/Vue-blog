@@ -11,7 +11,7 @@
             <BaseAside v-if="$store.state.userInfo" />
           </el-col>
 
-          <el-col :span="18" :lg="{ span: 24 }">
+          <el-col :span="24" :lg="{ span: 24 }">
             <el-main class="blog-main">
               <keep-alive include="ArticleList">
                 <router-view v-if="isRouteLoading" :loading="loading"></router-view>
